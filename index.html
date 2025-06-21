@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>貓咪抽卡機</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(45deg, #ffcccb, #ffe4e1);
+      width: 100%;
+      padding: 1em;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 1em 2em;
+      font-size: 1.2em;
+      border-radius: 1em;
+      border: none;
+      background: #ffcccb;
+      margin: 1em;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 180px;
+      height: 240px;
+      border-radius: 1em;
+      margin: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: white;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .R { background: #b87333; }
+    .UR { background: silver; }
+    .LSR { background: gold; }
+    .SGR { background: black; border: 2px solid gold; }
+    .SC { background: linear-gradient(45deg, red, orange, yellow, green, blue, purple); }
+
+    .result {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <header>貓咪抽卡機</header>
+  <button onclick="drawCard()">抽卡！</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    const probabilities = [
+      { rarity: "SC", chance: 0.01 },
+      { rarity: "SGR", chance: 0.03 },
+      { rarity: "LSR", chance: 0.05 },
+      { rarity: "UR", chance: 0.16 },
+      { rarity: "R", chance: 0.75 }
+    ];
+
+    function drawCard() {
+      let roll = Math.random();
+      let total = 0;
+      let result = probabilities.find(p => {
+        total += p.chance;
+        return roll <= total;
+      });
+
+      const card = document.createElement("div");
+      card.className = "card " + result.rarity;
+      card.textContent = result.rarity;
+      document.getElementById("result").appendChild(card);
+    }
+  </script>
+</body>
+</html>
